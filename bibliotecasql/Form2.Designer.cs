@@ -45,9 +45,9 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
+            this.btnAddImagem = new System.Windows.Forms.Button();
+            this.btnDeleteImagem = new System.Windows.Forms.Button();
+            this.btnGravaImagem = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button8 = new System.Windows.Forms.Button();
@@ -197,35 +197,38 @@
             this.button4.TabIndex = 15;
             this.button4.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // btnAddImagem
             // 
-            this.button5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button5.BackgroundImage")));
-            this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button5.Location = new System.Drawing.Point(231, 289);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(44, 43);
-            this.button5.TabIndex = 16;
-            this.button5.UseVisualStyleBackColor = true;
+            this.btnAddImagem.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddImagem.BackgroundImage")));
+            this.btnAddImagem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnAddImagem.Location = new System.Drawing.Point(231, 289);
+            this.btnAddImagem.Name = "btnAddImagem";
+            this.btnAddImagem.Size = new System.Drawing.Size(44, 43);
+            this.btnAddImagem.TabIndex = 16;
+            this.btnAddImagem.UseVisualStyleBackColor = true;
+            this.btnAddImagem.Click += new System.EventHandler(this.btnAddImagem_Click);
             // 
-            // button6
+            // btnDeleteImagem
             // 
-            this.button6.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button6.BackgroundImage")));
-            this.button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button6.Location = new System.Drawing.Point(281, 289);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(44, 43);
-            this.button6.TabIndex = 17;
-            this.button6.UseVisualStyleBackColor = true;
+            this.btnDeleteImagem.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnDeleteImagem.BackgroundImage")));
+            this.btnDeleteImagem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnDeleteImagem.Location = new System.Drawing.Point(281, 289);
+            this.btnDeleteImagem.Name = "btnDeleteImagem";
+            this.btnDeleteImagem.Size = new System.Drawing.Size(44, 43);
+            this.btnDeleteImagem.TabIndex = 17;
+            this.btnDeleteImagem.UseVisualStyleBackColor = true;
+            this.btnDeleteImagem.Click += new System.EventHandler(this.btnDeleteImagem_Click);
             // 
-            // button7
+            // btnGravaImagem
             // 
-            this.button7.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button7.BackgroundImage")));
-            this.button7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button7.Location = new System.Drawing.Point(331, 289);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(44, 43);
-            this.button7.TabIndex = 18;
-            this.button7.UseVisualStyleBackColor = true;
+            this.btnGravaImagem.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGravaImagem.BackgroundImage")));
+            this.btnGravaImagem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGravaImagem.Location = new System.Drawing.Point(331, 289);
+            this.btnGravaImagem.Name = "btnGravaImagem";
+            this.btnGravaImagem.Size = new System.Drawing.Size(44, 43);
+            this.btnGravaImagem.TabIndex = 18;
+            this.btnGravaImagem.UseVisualStyleBackColor = true;
+            this.btnGravaImagem.Click += new System.EventHandler(this.btnGravaImagem_Click);
             // 
             // pictureBox1
             // 
@@ -263,9 +266,9 @@
             this.Controls.Add(this.button8);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
+            this.Controls.Add(this.btnGravaImagem);
+            this.Controls.Add(this.btnDeleteImagem);
+            this.Controls.Add(this.btnAddImagem);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -309,9 +312,9 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button btnAddImagem;
+        private System.Windows.Forms.Button btnDeleteImagem;
+        private System.Windows.Forms.Button btnGravaImagem;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button8;
