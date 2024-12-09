@@ -1,4 +1,6 @@
-﻿using System;
+﻿using biblioteca_sql;
+using System;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO; // Namespace correto para manipulação de arquivos e diretórios
@@ -80,6 +82,41 @@ namespace bibliotecasql
             {
                 // Mostrar mensagem de erro em caso de falha
                 MessageBox.Show($"Erro ao salvar a imagem: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnAddLivro_Click(object sender, EventArgs e)
+        {
+            DatabaseConnection.OpenConnection(); 
+            SqlConnection con = new SqlConnection("Data Source=LAPTOP-M12AA0DA; Initial Catalog=biblioteca; Integrated Security=True; Encrypt=False; TrustServerCertificate=True");
+            con.Open();
+            if (con.State == System.Data.ConnectionState.Open)
+            {
+                string query = "INSERT INTO [dbo].[Livro] (titulo, idAutor, idGenero, Editora, numPaginas) " +
+                               "VALUES (@titulo, @idAutor, @idGenero, @Editora, @numPaginas)";
+
+                SqlCommand sql = new SqlCommand(query, con);
+
+                // Evitar SQL Injection
+                sql.Parameters.AddWithValue("@titulo", txtitulo.Text);
+                sql.Parameters.AddWithValue("@idAutor", txtautorl.Text);
+                sql.Parameters.AddWithValue("@idGenero", txtgenerol.Text);
+                sql.Parameters.AddWithValue("@Editora", txteditora.Text);
+                sql.Parameters.AddWithValue("@numPaginas", txtstock.Text);
+
+                try
+                {
+                    sql.ExecuteNonQuery();
+                    MessageBox.Show("Livro Adicionado");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao adicionar livro: " + ex.Message);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
         }
     }
