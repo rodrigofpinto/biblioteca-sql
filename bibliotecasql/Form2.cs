@@ -1,9 +1,10 @@
 ﻿using biblioteca_sql;
 using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO; // Namespace correto para manipulação de arquivos e diretórios
+using System.IO;
 using System.Windows.Forms;
 
 namespace bibliotecasql
@@ -17,7 +18,6 @@ namespace bibliotecasql
 
         private void btnAddImagem_Click(object sender, EventArgs e)
         {
-            // Criar diálogo para seleção de arquivo
             OpenFileDialog open = new OpenFileDialog
             {
                 Filter = "Image Files (*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg;*.jpeg;*.gif;*.bmp;*.png",
@@ -28,12 +28,10 @@ namespace bibliotecasql
             {
                 try
                 {
-                    // Carregar a imagem no PictureBox
                     pictureBox1.Image = Image.FromFile(open.FileName);
                 }
                 catch (Exception ex)
                 {
-                    // Mostrar mensagem de erro em caso de falha
                     MessageBox.Show($"Erro ao carregar a imagem: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -41,83 +39,184 @@ namespace bibliotecasql
 
         private void btnDeleteImagem_Click(object sender, EventArgs e)
         {
-            // Remover imagem do PictureBox
             pictureBox1.Image = null;
         }
 
         private void btnGravaImagem_Click(object sender, EventArgs e)
         {
-            // Verificar se há uma imagem no PictureBox
             if (pictureBox1.Image == null)
             {
                 MessageBox.Show("Nenhuma imagem para salvar!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Criar pasta "images" se não existir
             string directoryPath = "images";
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
             }
 
-            // Definir o nome do arquivo (substitua `id` pelo valor apropriado)
-            string id = "default"; // Você pode alterar o valor do id conforme necessário
+            string id = "default";
             string filePath = Path.Combine(directoryPath, $"{id}.jpg");
 
             try
             {
-                // Verificar se o arquivo já existe e excluí-lo
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);
                 }
 
-                // Salvar a imagem como JPEG
                 pictureBox1.Image.Save(filePath, ImageFormat.Jpeg);
-
                 MessageBox.Show("Imagem salva com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                // Mostrar mensagem de erro em caso de falha
                 MessageBox.Show($"Erro ao salvar a imagem: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnAddLivro_Click(object sender, EventArgs e)
         {
-            DatabaseConnection.OpenConnection(); 
-            SqlConnection con = new SqlConnection("Data Source=LAPTOP-M12AA0DA; Initial Catalog=biblioteca; Integrated Security=True; Encrypt=False; TrustServerCertificate=True");
-            con.Open();
-            if (con.State == System.Data.ConnectionState.Open)
+            try
             {
-                string query = "INSERT INTO [dbo].[Livro] (titulo, idAutor, idGenero, Editora, numPaginas) " +
-                               "VALUES (@titulo, @idAutor, @idGenero, @Editora, @numPaginas)";
+                DatabaseConnection.OpenConnection();
 
-                SqlCommand sql = new SqlCommand(query, con);
+                string query = "INSERT INTO Livro (titulo, idAutor, idGenero, Editora, numPaginas) VALUES (@titulo, @idAutor, @idGenero, @Editora, @numPaginas)";
 
-                // Evitar SQL Injection
-                sql.Parameters.AddWithValue("@titulo", txtitulo.Text);
-                sql.Parameters.AddWithValue("@idAutor", txtautorl.Text);
-                sql.Parameters.AddWithValue("@idGenero", txtgenerol.Text);
-                sql.Parameters.AddWithValue("@Editora", txteditora.Text);
-                sql.Parameters.AddWithValue("@numPaginas", txtstock.Text);
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@titulo", txtTitulo.Text),
+                    new SqlParameter("@idAutor", Convert.ToInt32(txtAutor.Text)),
+                    new SqlParameter("@idGenero", Convert.ToInt32(txtgenerol.Text)),
+                    new SqlParameter("@Editora", txteditora.Text),
+                    new SqlParameter("@numPaginas", Convert.ToInt32(txtstock.Text))
+                };
 
-                try
+                if (DatabaseConnection.ExecuteNonQuery(query, parameters))
                 {
-                    sql.ExecuteNonQuery();
-                    MessageBox.Show("Livro Adicionado");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao adicionar livro: " + ex.Message);
-                }
-                finally
-                {
-                    con.Close();
+                    MessageBox.Show("Livro adicionado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao adicionar o livro: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                DatabaseConnection.CloseConnection();
+            }
+        }
+
+        private void btnUpdateLivro_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DatabaseConnection.OpenConnection();
+
+                string query = "UPDATE Livro SET titulo = @titulo, idAutor = @idAutor, idGenero = @idGenero, Editora = @Editora, numPaginas = @numPaginas WHERE idLivro = @idLivro";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@titulo", txtTitulo.Text),
+                    new SqlParameter("@idAutor", Convert.ToInt32(txtAutor.Text)),
+                    new SqlParameter("@idGenero", Convert.ToInt32(txtgenerol.Text)),
+                    new SqlParameter("@Editora", txteditora.Text),
+                    new SqlParameter("@numPaginas", Convert.ToInt32(txtstock.Text)),
+                    new SqlParameter("@idLivro", Convert.ToInt32(txtIdLivro.Text))
+                };
+
+                if (DatabaseConnection.ExecuteNonQuery(query, parameters))
+                {
+                    MessageBox.Show("Livro atualizado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao atualizar o livro: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                DatabaseConnection.CloseConnection();
+            }
+        }
+
+        private void btnDeleteLivro_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DatabaseConnection.OpenConnection();
+
+                string query = "DELETE FROM Livro WHERE idLivro = @idLivro";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@idLivro", Convert.ToInt32(txtIdLivro.Text))
+                };
+
+                if (DatabaseConnection.ExecuteNonQuery(query, parameters))
+                {
+                    MessageBox.Show("Livro deletado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao deletar o livro: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                DatabaseConnection.CloseConnection();
+            }
+        }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(DatabaseConnection.ConnectionString);
+                con.Open();
+
+                SqlDataAdapter sqlda = new SqlDataAdapter("SELECT * FROM Livro", con);
+                DataTable dtb1 = new DataTable();
+                sqlda.Fill(dtb1);
+
+                dgvlivro.DataSource = dtb1;
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar os dados: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(DatabaseConnection.ConnectionString);
+                con.Open();
+
+                SqlDataAdapter sqlda = new SqlDataAdapter("SELECT * FROM Livro", con);
+                DataTable dtb1 = new DataTable();
+                sqlda.Fill(dtb1);
+
+                dgvlivro.DataSource = dtb1;
+                con.Close();
+                MessageBox.Show("Dados atualizados com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao atualizar os dados: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRefresh_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
