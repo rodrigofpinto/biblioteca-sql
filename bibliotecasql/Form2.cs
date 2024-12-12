@@ -6,6 +6,10 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
+using biblioteca_sql;
+using System;
+using System.Data.SqlClient;
+using System.Windows.Forms;
 
 namespace bibliotecasql
 {
@@ -216,7 +220,22 @@ namespace bibliotecasql
 
         private void btnRefresh_Click_1(object sender, EventArgs e)
         {
+            try
+            {
+                SqlConnection con = new SqlConnection(DatabaseConnection.conString);
+                con.Open();
 
+                SqlDataAdapter sqlda = new SqlDataAdapter("SELECT * FROM Livro", con);
+                DataTable dtb1 = new DataTable();
+                sqlda.Fill(dtb1);
+
+                dgvlivro.DataSource = dtb1;
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar os dados: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
