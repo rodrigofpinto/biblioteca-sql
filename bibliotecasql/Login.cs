@@ -81,14 +81,12 @@ namespace bibliotecasql
                 MessageBox.Show("Por favor, preencha todos os campos.");
                 return;
             }
-
             // Verifica se a senha e a confirmação são iguais
             if (txtPasswordRegisto.Text != txtConfirmPasswordRegisto.Text)
             {
                 MessageBox.Show("As senhas não coincidem.");
                 return;
             }
-
             try
             {
                 // Criptografa a senha
@@ -152,10 +150,6 @@ namespace bibliotecasql
                 btnshow_pass.BackgroundImage = Properties.Resources.eyes; // Imagem de olho fechado
             }
         }
-
-
-
-
 
         private void btnshow_pass_registo_Click(object sender, EventArgs e)
         {

@@ -6,10 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
-using biblioteca_sql;
-using System;
-using System.Data.SqlClient;
-using System.Windows.Forms;
+
 
 namespace bibliotecasql
 {
